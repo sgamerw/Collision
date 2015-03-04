@@ -34,7 +34,7 @@ bool HelloWorld::init()
     // 2. create level grid
     for (int x = 0; x < LEVEL_WIDTH; x++) {
         for (int y = 0; y < LEVEL_HEIGHT; y++) {
-            if( y == 0 || (y < LEVEL_HEIGHT-1 && random(1, 100) < 30) ){
+            if( y == 0 || (y < LEVEL_HEIGHT-2 && random(1, 100) < 30) ){
                 _level[x][y] = true;
                 DrawNode *block = DrawNode::create();
                 block->drawSolidRect(Vec2(0,0), Vec2(GRID_SIZE, GRID_SIZE), Color4F::GRAY);

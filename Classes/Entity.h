@@ -17,12 +17,13 @@ class Entity : public Node
 {
 private:
     
-    int _cx;
-    int _cy;
-    float _xr;
-    float _yr;
-    float _radius;
-    float _frict;
+    int _cx; // 所在格子的x坐标
+    int _cy; // 所在格子的y坐标
+    float _xr; // 在格子内的x位置百分比
+    float _yr; // 在格子内的y位置百分比
+    float _radius; // 半径
+    float _frict; // 摩擦力
+    bool _collidesWalls; // 是否会与墙发生碰撞
     
     bool (*_level)[LEVEL_HEIGHT];
     

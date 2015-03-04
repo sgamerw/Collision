@@ -26,18 +26,19 @@ Entity * Entity::create()
 
 bool Entity::init()
 {
-    _sprite = DrawNode::create();
-    _sprite->drawDot(Vec2(GRID_SIZE/2,GRID_SIZE/2), GRID_SIZE/2, Color4F::RED);
-    this->addChild(_sprite);
-    
     _cx = 0;
     _cy = LEVEL_HEIGHT-1;
     _xr = 0.5;
     _yr = 0.5;
     _xx = (_cx + _xr) * GRID_SIZE;
     _yy = (_cy + _yr) * GRID_SIZE;
-    _radius = 0.4;
+    _radius = 0.5 * GRID_SIZE;
     _frict = 0.85;
+    _collidesWalls = true;
+    
+    _sprite = DrawNode::create();
+    _sprite->drawDot(Vec2(_radius,_radius), _radius, Color4F::RED);
+    this->addChild(_sprite);
     this->setPosition(_xx, _yy);
     return true;
 }
@@ -70,20 +71,19 @@ bool Entity::onGround()
 
 void Entity::update()
 {
-//    float frictX = 0.94;
-//    float frictY = 0.96;
-//    float gravity = 0.04;
-    
+    float r2g = 0.9 * (_radius / GRID_SIZE); // 假设会挤压可以缩小体积
     // X component
     _xr += _dx;
     _dx = _dx*_frict;
-    if (hasCollision(_cx-1, _cy) && _xr <= _radius) {
-        _dx = 0;
-        _xr = _radius;
-    }
-    if (hasCollision(_cx+1, _cy) && _xr >= 1-_radius) {
-        _dx = 0;
-        _xr = 1-_radius;
+    if (_collidesWalls) {
+        if (hasCollision(_cx-1, _cy) && _xr <= r2g) {
+            _dx = 0;
+            _xr = r2g;
+        }
+        if (hasCollision(_cx+1, _cy) && _xr >= 1-r2g) {
+            _dx = 0;
+            _xr = 1-r2g;
+        }
     }
     while (_xr > 1) {
         _cx++;
@@ -98,13 +98,15 @@ void Entity::update()
 //    _dy -= gravity;
     _yr += _dy;
     _dy = _dy*_frict;
-    if (hasCollision(_cx, _cy-1) && _yr <= _radius) {
-        _dy = 0;
-        _yr = _radius;
-    }
-    if (hasCollision(_cx, _cy+1) && _yr >= 1-_radius) {
-        _dy = 0;
-        _yr = 1-_radius;
+    if (_collidesWalls) {
+        if (hasCollision(_cx, _cy-1) && _yr <= r2g) {
+            _dy = 0;
+            _yr = r2g;
+        }
+        if (hasCollision(_cx, _cy+1) && _yr >= 1-r2g) {
+            _dy = 0;
+            _yr = 1-r2g;
+        }
     }
     while (_yr > 1) {
         _yr--;
