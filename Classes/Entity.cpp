@@ -36,6 +36,7 @@ bool Entity::init()
     _yr = 0.5;
     _xx = (_cx + _xr) * GRID_SIZE;
     _yy = (_cy + _yr) * GRID_SIZE;
+    _radius = 0.4;
     this->setPosition(_xx, _yy);
     return true;
 }
@@ -63,7 +64,7 @@ bool Entity::hasCollision(int cx, int cy)
 
 bool Entity::onGround()
 {
-    return this->hasCollision(_cx, _cy-1) && (_yr<=0.31);
+    return this->hasCollision(_cx, _cy-1) && (_yr<=_radius);
 }
 
 void Entity::update()
@@ -75,13 +76,13 @@ void Entity::update()
     // X component
     _xr += _dx;
     _dx = _dx*frictX;
-    if (hasCollision(_cx-1, _cy) && _xr <= 0.3) {
+    if (hasCollision(_cx-1, _cy) && _xr <= _radius) {
         _dx = 0;
-        _xr = 0.3;
+        _xr = _radius;
     }
-    if (hasCollision(_cx+1, _cy) && _xr >= 0.7) {
+    if (hasCollision(_cx+1, _cy) && _xr >= 1-_radius) {
         _dx = 0;
-        _xr = 0.7;
+        _xr = 1-_radius;
     }
     while (_xr > 1) {
         _cx++;
@@ -96,13 +97,13 @@ void Entity::update()
     _dy -= gravity;
     _yr += _dy;
     _dy = _dy*frictY;
-    if (hasCollision(_cx, _cy-1) && _yr <= 0.3) {
+    if (hasCollision(_cx, _cy-1) && _yr <= _radius) {
         _dy = 0;
-        _yr = 0.3;
+        _yr = _radius;
     }
-    if (hasCollision(_cx, _cy+1) && _yr >= 0.7) {
+    if (hasCollision(_cx, _cy+1) && _yr >= 1-_radius) {
         _dy = 0;
-        _yr = 0.7;
+        _yr = 1-_radius;
     }
     while (_yr > 1) {
         _yr--;

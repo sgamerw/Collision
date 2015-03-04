@@ -21,6 +21,7 @@ private:
     int _cy;
     float _xr;
     float _yr;
+    float _radius;
     
     bool (*_level)[LEVEL_HEIGHT];
     
