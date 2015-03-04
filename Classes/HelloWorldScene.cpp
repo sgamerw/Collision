@@ -69,16 +69,18 @@ bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
 {
     
     Vec2 p = touch->getLocation();
-    float speed = 0.04;
+    float speed = 0.4;
     if (p.x > _hero->_xx) {
         _hero->_dx += speed;
     }
     else{
         _hero->_dx -= speed;
     }
-    if ((p.y > _hero->_yy) && _hero->onGround() ) {//
-        CCLOG("%f",_hero->_yy);
-        _hero->_dy += 0.5;
+    if (p.y > _hero->_yy) {
+        _hero->_dy += speed;
+    }
+    else{
+        _hero->_dy -= speed;
     }
     return true;
 }

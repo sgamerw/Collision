@@ -22,6 +22,7 @@ private:
     float _xr;
     float _yr;
     float _radius;
+    float _frict;
     
     bool (*_level)[LEVEL_HEIGHT];
     
