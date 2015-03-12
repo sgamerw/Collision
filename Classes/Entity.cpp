@@ -10,6 +10,8 @@
 #include "Const.h"
 #include "CCDrawNode.h"
 
+Vector<Entity *> Entity::ALL;
+
 Entity * Entity::create()
 {
     Entity * ret = new (std::nothrow) Entity();
@@ -38,8 +40,9 @@ bool Entity::init()
     
     _sprite = DrawNode::create();
     _sprite->drawDot(Vec2(_radius,_radius), _radius, Color4F::RED);
-    this->addChild(_sprite);
-    this->setPosition(_xx, _yy);
+    addChild(_sprite);
+    setPosition(_xx, _yy);
+    _register();
     return true;
 }
 
@@ -66,8 +69,24 @@ bool Entity::hasCollision(int cx, int cy)
 
 bool Entity::onGround()
 {
-    return this->hasCollision(_cx, _cy-1) && (_yr<=_radius);
+    return hasCollision(_cx, _cy-1) && (_yr<=_radius);
 }
+
+void Entity::_register()
+{
+    Entity::ALL.pushBack(this);
+};
+
+void Entity::_unRegister()
+{
+    Vector<Entity *>::iterator entor;
+    for (entor = Entity::ALL.begin(); entor != Entity::ALL.end(); entor++) {
+        if (*entor == this) {
+            Entity::ALL.erase(entor);
+            break;
+        }
+    }
+};
 
 void Entity::update()
 {
@@ -95,7 +114,6 @@ void Entity::update()
     }
     
     // Y component
-//    _dy -= gravity;
     _yr += _dy;
     _dy = _dy*_frict;
     if (_collidesWalls) {
@@ -119,5 +137,5 @@ void Entity::update()
     
     _xx = (_cx+_xr)*GRID_SIZE;
     _yy = (_cy+_yr)*GRID_SIZE;
-    this->setPosition((int)_xx, (int)_yy);
+    setPosition((int)_xx, (int)_yy);
 }

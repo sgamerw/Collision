@@ -15,24 +15,12 @@ USING_NS_CC;
 
 class Entity : public Node
 {
-private:
-    
-    int _cx; // 所在格子的x坐标
-    int _cy; // 所在格子的y坐标
-    float _xr; // 在格子内的x位置百分比
-    float _yr; // 在格子内的y位置百分比
-    float _radius; // 半径
-    float _frict; // 摩擦力
-    bool _collidesWalls; // 是否会与墙发生碰撞
-    
-    bool (*_level)[LEVEL_HEIGHT];
-    
-    DrawNode * _sprite;
 public:
-    float _xx;
-    float _yy;
-    float _dx;
-    float _dy;
+    static Vector<Entity *> ALL;
+    float   _xx;
+    float   _yy;
+    float   _dx;
+    float   _dy;
     
     void pos(float x, float y);
     static Entity * create();
@@ -41,6 +29,21 @@ public:
     void setLevel(bool (*level)[LEVEL_HEIGHT]);
     bool hasCollision(int cx, int cy);
     bool onGround();
+    void _register();
+    void _unRegister();
+    
+private:
+    int     _cx; // 所在格子的x坐标
+    int     _cy; // 所在格子的y坐标
+    float   _xr; // 在格子内的x位置百分比
+    float   _yr; // 在格子内的y位置百分比
+    float   _radius; // 半径
+    float   _frict; // 摩擦力
+    bool    _collidesWalls; // 是否会与墙发生碰撞
+    bool    (*_level)[LEVEL_HEIGHT];
+    bool    _repel; // 是否会被击退
+    
+    DrawNode * _sprite;
 };
 
 #endif

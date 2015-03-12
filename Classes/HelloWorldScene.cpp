@@ -39,14 +39,14 @@ bool HelloWorld::init()
                 DrawNode *block = DrawNode::create();
                 block->drawSolidRect(Vec2(0,0), Vec2(GRID_SIZE, GRID_SIZE), Color4F::GRAY);
                 block->setPosition(origin.x+x*GRID_SIZE + GRID_SIZE/2, origin.y+y*GRID_SIZE + GRID_SIZE/2);
-                this->addChild(block);
+                addChild(block);
             }
             else {
                 _level[x][y] = false;
                 DrawNode *block = DrawNode::create();
                 block->drawSolidRect(Vec2(0,0), Vec2(GRID_SIZE, GRID_SIZE), Color4F::WHITE);
                 block->setPosition(origin.x+x*GRID_SIZE + GRID_SIZE/2, origin.y+y*GRID_SIZE + GRID_SIZE/2);
-                this->addChild(block);
+                addChild(block);
             }
         }
     }
@@ -57,10 +57,13 @@ bool HelloWorld::init()
     _hero->setLevel(_level);
     this->addChild(_hero);
     
-    this->scheduleUpdate();
+    // 4.create other entities
     
-    this->setTouchEnabled(true);
-    this->setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
+    
+    scheduleUpdate();
+    
+    setTouchEnabled(true);
+    setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
     
     return true;
 }
