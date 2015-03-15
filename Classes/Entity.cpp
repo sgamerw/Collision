@@ -37,6 +37,8 @@ bool Entity::init()
     _radius = 0.5 * GRID_SIZE;
     _frict = 0.85;
     _collidesWalls = true;
+    _weight = 1;
+    _repel = true;
     
     _sprite = DrawNode::create();
     _sprite->drawDot(Vec2(_radius,_radius), _radius, Color4F::RED);
@@ -44,12 +46,6 @@ bool Entity::init()
     setPosition(_xx, _yy);
     _register();
     return true;
-}
-
-void Entity::pos(float x, float y)
-{
-    _xx = x;
-    _yy = y;
 }
 
 void Entity::setLevel(bool (*level)[LEVEL_HEIGHT])
@@ -88,8 +84,45 @@ void Entity::_unRegister()
     }
 };
 
+bool Entity::isClose(Entity *en)
+{
+    return (abs(_cx - en->_cx) <= 1 && abs(_cy - en->_cy) <= 1);
+}
+
+void Entity::setGrid(int cx, int cy)
+{
+    _cx = cx;
+    _cy = cy;
+    _xx = (_cx+_xr)*GRID_SIZE;
+    _yy = (_cy+_yr)*GRID_SIZE;
+    setPosition((int)_xx, (int)_yy);
+    
+}
+
 void Entity::update()
 {
+    if (_repel) {
+        Vector<Entity *>::iterator entor;
+        for (entor = Entity::ALL.begin(); entor != Entity::ALL.end(); entor++) {
+            if ( *entor != this && (*entor)->_repel && isClose(*entor)) {
+                Vec2 pt = getPosition();
+                Vec2 ept = (*entor)->getPosition();
+                float d = sqrtf( (_xx-(*entor)->_xx)*(_xx-(*entor)->_xx) + (_yy-(*entor)->_yy)*(_yy-(*entor)->_yy) );
+                float min = _radius + (*entor)->_radius;
+                if (d < min) {
+                    float confict = min - d;
+                    float w = _weight / (_weight + (*entor)->_weight);
+                    float ew = (*entor)->_weight / (_weight + (*entor)->_weight);
+                    float a = atan2f((*entor)->_yy-_yy, (*entor)->_xx-_xx);
+                    _dx -= cosf(a) * (confict/GRID_SIZE) * w;
+                    _dy -= sinf(a) * (confict/GRID_SIZE) * w;
+                    (*entor)->_dx += cosf(a) * (confict/GRID_SIZE) * ew;
+                    (*entor)->_dy += sinf(a) * (confict/GRID_SIZE) * ew;
+                }
+            }
+        }
+    }
+    
     float r2g = 0.9 * (_radius / GRID_SIZE); // 假设会挤压可以缩小体积
     // X component
     _xr += _dx;

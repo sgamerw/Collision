@@ -24,6 +24,8 @@ public:
     
     bool onTouchBegan(Touch *touch, Event *unused_event);
     
+    void createEntities(int num);
+    
 private:
     bool _level[LEVEL_WIDTH][LEVEL_HEIGHT];
     Entity * _hero;

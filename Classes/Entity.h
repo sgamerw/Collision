@@ -21,6 +21,8 @@ public:
     float   _yy;
     float   _dx;
     float   _dy;
+    float   _weight;
+    bool    _repel; // 是否会被击退
     
     void pos(float x, float y);
     static Entity * create();
@@ -31,6 +33,8 @@ public:
     bool onGround();
     void _register();
     void _unRegister();
+    bool isClose(Entity *en);
+    void setGrid(int cx, int cy);
     
 private:
     int     _cx; // 所在格子的x坐标
@@ -41,7 +45,6 @@ private:
     float   _frict; // 摩擦力
     bool    _collidesWalls; // 是否会与墙发生碰撞
     bool    (*_level)[LEVEL_HEIGHT];
-    bool    _repel; // 是否会被击退
     
     DrawNode * _sprite;
 };

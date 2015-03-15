@@ -58,7 +58,14 @@ bool HelloWorld::init()
     this->addChild(_hero);
     
     // 4.create other entities
+    Entity *en = Entity::create();
+    en->setLevel(_level);
+    en->setGrid(1, LEVEL_HEIGHT - 2);
+    this->addChild(en);
     
+//    for (Vector<Entity*>::iterator itor = Entity::ALL.begin(); itor!=Entity::ALL.end(); itor++) {
+//        CCLOG("Entity :%d", *itor);
+//    }
     
     scheduleUpdate();
     
@@ -90,5 +97,16 @@ bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
 
 void HelloWorld::update(float delta)
 {
-    _hero->update();
+    for (Vector<Entity*>::iterator itor = Entity::ALL.begin(); itor!=Entity::ALL.end(); itor++) {
+        (*itor)->update();
+    }
+}
+
+void HelloWorld::createEntities(int num)
+{
+    for (int i = 0; i < num; i++) {
+        Entity * ent = Entity::create();
+        ent->setLevel(_level);
+        addChild(ent);
+    }
 }
