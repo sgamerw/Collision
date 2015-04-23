@@ -63,37 +63,50 @@ bool HelloWorld::init()
     en->setGrid(1, LEVEL_HEIGHT - 2);
     this->addChild(en);
     
-//    for (Vector<Entity*>::iterator itor = Entity::ALL.begin(); itor!=Entity::ALL.end(); itor++) {
-//        CCLOG("Entity :%d", *itor);
-//    }
-    
     scheduleUpdate();
     
-    setTouchEnabled(true);
-    setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
+//    setTouchEnabled(true);
+//    setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
+    
+    auto listener = _keyboardListener->create();
+    listener->onKeyPressed = []( EventKeyboard::KeyCode keyCode, Event *event ){
+        auto hero = static_cast<Entity *>( event->getCurrentTarget() );
+        float speed = 0.4;
+        if ( keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW ) {
+            hero->_dy += speed;
+        }else if ( keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW ) {
+            hero->_dy -= speed;
+        }else if ( keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW ) {
+            hero->_dx += speed;
+        }else if ( keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW ) {
+            hero->_dx -= speed;
+        }
+    };
+    
+    _eventDispatcher->addEventListenerWithSceneGraphPriority( listener, _hero );
     
     return true;
 }
 
-bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
-{
-    
-    Vec2 p = touch->getLocation();
-    float speed = 0.4;
-    if (p.x > _hero->_xx) {
-        _hero->_dx += speed;
-    }
-    else{
-        _hero->_dx -= speed;
-    }
-    if (p.y > _hero->_yy) {
-        _hero->_dy += speed;
-    }
-    else{
-        _hero->_dy -= speed;
-    }
-    return true;
-}
+//bool HelloWorld::onTouchBegan(Touch *touch, Event *unused_event)
+//{
+//    
+//    Vec2 p = touch->getLocation();
+//    float speed = 0.4;
+//    if (p.x > _hero->_xx) {
+//        _hero->_dx += speed;
+//    }
+//    else{
+//        _hero->_dx -= speed;
+//    }
+//    if (p.y > _hero->_yy) {
+//        _hero->_dy += speed;
+//    }
+//    else{
+//        _hero->_dy -= speed;
+//    }
+//    return true;
+//}
 
 void HelloWorld::update(float delta)
 {

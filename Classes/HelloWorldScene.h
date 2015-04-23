@@ -22,7 +22,7 @@ public:
     
     void update(float delta);
     
-    bool onTouchBegan(Touch *touch, Event *unused_event);
+//    bool onTouchBegan(Touch *touch, Event *unused_event);
     
     void createEntities(int num);
     
